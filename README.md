@@ -8,6 +8,8 @@
 * [Day 2](#----day-2--rock-paper-scissors----)
 * [Day 3](#----day-3--rucksack-reorganization----)
 * [Day 4](#----day-4--camp-cleanup----)
+* [Day 5](#----day-5--supply-stacks----)
+* [Day 6](#----day-6--tuning-trouble----)
 
 ## --- Day 1: Calorie Counting ---
 
