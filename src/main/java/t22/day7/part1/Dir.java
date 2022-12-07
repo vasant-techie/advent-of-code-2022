@@ -3,6 +3,7 @@ package t22.day7.part1;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Dir {
@@ -12,6 +13,8 @@ public class Dir {
 
     private Dir parent;
 
+    private long totalSize;
+
 
     public Dir(Dir parent, String dirName) {
         this.parent = parent;
@@ -19,6 +22,13 @@ public class Dir {
     }
 
 
+    public long getTotalSize() {
+        return totalSize;
+    }
+
+    public void setTotalSize(long totalSize) {
+        this.totalSize = totalSize;
+    }
 
     public List<File> getFiles() {
         return files;
@@ -54,15 +64,13 @@ public class Dir {
 
     public void printStackTrace() {
         String dirName = this.getName();
-        List<File> files = this.getFiles();
-        List<Dir> dirs = this.getDirs();
         System.out.println("- " + dirName + " (dir)");
         buildStackTrace(this, 2);
     }
 
     private void buildStackTrace(Dir dir, int spaceCount) {
-        for(File file: files) {
-            System.out.println(getSpace(spaceCount) + "-    " + file.getName() + " (file), size=" + file.getSize());
+        for(File file: dir.getFiles()) {
+            System.out.println(getSpace(spaceCount) + "- " + file.getName() + " (file, size=" + file.getSize()+")");
         }
         for(Dir curDir: dir.getDirs()) {
             System.out.println(getSpace(spaceCount) + "- " + curDir.getName() + " (dir)");
@@ -75,5 +83,18 @@ public class Dir {
             spaceBuilder.append(" ");
         }
         return spaceBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dir dir = (Dir) o;
+        return Objects.equals(name, dir.name) && Objects.equals(files, dir.files) && Objects.equals(dirs, dir.dirs) && Objects.equals(parent, dir.parent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, files, dirs, parent);
     }
 }

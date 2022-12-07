@@ -1,9 +1,13 @@
-package t22.day7.part1;
+package t22.day7.part2;
+
+import t22.day7.part1.Dir;
+import t22.day7.part1.File;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,20 +23,38 @@ public class Main {
         Dir dir = parseData(lines);
         dir.printStackTrace();
         calc(dir);
-        long result = printDirSizes(dir, 0l);
-
+        List<Long> dirSizes = new ArrayList<>();
+        getDirSizes(dir, dirSizes);
+        long totalUsedSpace = dir.getTotalSize();
+        System.out.println("Total Used Space: " + totalUsedSpace);
+        long requiredUnUsedSpace = 30000000l;
+        long totalSpaceAvailable = 70000000l - totalUsedSpace;
+        long requiredFreeSpace = requiredUnUsedSpace - totalSpaceAvailable;
+        System.out.println("Required Free Space: " + requiredFreeSpace);
+        long result = findSmallestDirSize(dirSizes, requiredFreeSpace);
         System.out.println("Result: " + result);
     }
 
-    private long printDirSizes(Dir dir, long result) {
-        for(Dir curDir: dir.getDirs()) {
-            System.out.println("Dir Name: " + curDir.getName() + ", Size: " + curDir.getTotalSize());
-            if(curDir.getTotalSize() <= 100000) {
-                result += curDir.getTotalSize();
+    private long findSmallestDirSize(List<Long> dirSizes, long requiredFreeSpace) {
+        Collections.sort(dirSizes);
+        long smallest = dirSizes.get(dirSizes.size() - 1);
+
+        for (Long dirSize : dirSizes) {
+            if (dirSize == requiredFreeSpace) {
+                return dirSize;
+            } else if (dirSize > requiredFreeSpace && dirSize < smallest) {
+                smallest = dirSize;
             }
-            result = printDirSizes(curDir, result);
         }
-        return result;
+        return smallest;
+    }
+
+    private void getDirSizes(Dir dir, List<Long> dirSizes) {
+        for (Dir curDir : dir.getDirs()) {
+            //System.out.println("Dir Name: " + curDir.getName() + ", Size: " + curDir.getTotalSize());
+            dirSizes.add(curDir.getTotalSize());
+            getDirSizes(curDir, dirSizes);
+        }
     }
 
     private void calc(Dir dir) {
@@ -47,7 +69,7 @@ public class Main {
 
     private void updateParentRecursively(Dir dir, long fileSizesTotal) {
         Dir pDir = dir.getParent();
-        while(pDir != null) {
+        while (pDir != null) {
             pDir.setTotalSize(pDir.getTotalSize() + fileSizesTotal);
             pDir = pDir.getParent();
         }
