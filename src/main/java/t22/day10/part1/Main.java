@@ -44,7 +44,6 @@ public class Main {
                 .takeWhile(l -> (cycle.get() < threshold))
                 .filter(l -> l.startsWith("addx "))
                 .map(l -> Integer.parseInt(l.split(" ")[1]))
-//                .peek(System.out::println)
                 .reduce(1, (x,y) -> x + y);
     }
 }
