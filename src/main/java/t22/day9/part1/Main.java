@@ -31,7 +31,6 @@ public class Main {
         System.out.printf("\n#### X Start Pos: %d, Y Start Pos: %d\n", this.xStartPos, this.yStartPos);
         System.out.printf("\n#### X End Pos: %d, Y End Pos: %d\n", this.xEndPos, this.yEndPos);
         calcUniqueVisited(lines);
-        System.out.println();
         System.out.println("##### Result: " + tailCoords.size());
     }
 
@@ -43,8 +42,8 @@ public class Main {
 
         tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
         for (String line : lines) {
-            System.out.println();
-            System.out.println("Line: " + line);
+            //System.out.println();
+            //System.out.println("Line: " + line);
             String[] actionAndCount = line.split(" ");
             String action = actionAndCount[0];
             int count = Integer.parseInt(actionAndCount[1]);
@@ -67,8 +66,6 @@ public class Main {
                                 tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
                         }
-                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
-                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
                 case "L":
@@ -88,8 +85,6 @@ public class Main {
                                 tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
                         }
-                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
-                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
                 case "U":
@@ -109,8 +104,6 @@ public class Main {
                                 tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
                         }
-                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
-                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
                 case "D":
@@ -130,19 +123,17 @@ public class Main {
                                 tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
                         }
-                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
-                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
             }
-            System.out.printf("\nHead X: %d, Y: %d\n", headXEndPos, headYEndPos);
+            //System.out.printf("\nHead X: %d, Y: %d\n", headXEndPos, headYEndPos);
         }
     }
 
     private void find(List<String> lines) {
 
         for (String line : lines) {
-            System.out.println("Line: " + line);
+            //System.out.println("Line: " + line);
             String[] actionAndCount = line.split(" ");
             String action = actionAndCount[0];
             int count = Integer.parseInt(actionAndCount[1]);
@@ -178,9 +169,9 @@ public class Main {
                     }
                     break;
             }
-            System.out.printf("\nX Coord: %d, Y Coord: %d\n", this.xCoord, this.yCoord);
-            System.out.printf("\nX Start Pos: %d, Y Start Pos: %d\n", this.xStartPos, this.yStartPos);
-            System.out.printf("\nX End Pos: %d, Y End Pos: %d\n", this.xEndPos, this.yEndPos);
+            //System.out.printf("\nX Coord: %d, Y Coord: %d\n", this.xCoord, this.yCoord);
+            //System.out.printf("\nX Start Pos: %d, Y Start Pos: %d\n", this.xStartPos, this.yStartPos);
+            //System.out.printf("\nX End Pos: %d, Y End Pos: %d\n", this.xEndPos, this.yEndPos);
         }
     }
 }
