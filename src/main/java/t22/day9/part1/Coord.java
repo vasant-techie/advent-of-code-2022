@@ -8,7 +8,7 @@ public class Coord {
     private Integer y;
 
     public Coord(Integer x, Integer y) {
-        System.out.printf("\nTail X: %d, Y: %d", x, y);
+        System.out.println("Adding Tail X: " + x + ", Y: " + y);
         this.x = x;
         this.y = y;
     }

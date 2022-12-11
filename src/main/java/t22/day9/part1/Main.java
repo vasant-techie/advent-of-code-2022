@@ -21,24 +21,26 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Main main = new Main();
-        main.process("src/main/resources/day9-sample");
+        main.process("src/main/resources/day9");
     }
 
     private void process(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path));
         find(lines);
+        System.out.printf("\n#### X Coord: %d, Y Coord: %d\n", this.xCoord, this.yCoord);
+        System.out.printf("\n#### X Start Pos: %d, Y Start Pos: %d\n", this.xStartPos, this.yStartPos);
+        System.out.printf("\n#### X End Pos: %d, Y End Pos: %d\n", this.xEndPos, this.yEndPos);
         calcUniqueVisited(lines);
         System.out.println();
-        System.out.println("Result: " + tailCoords.size());
+        System.out.println("##### Result: " + tailCoords.size());
     }
 
     private void calcUniqueVisited(List<String> lines) {
-        int tailXEndPos = 0;
-        int tailYEndPos = 1;
+        int tailXEndPos = this.xStartPos;
+        int tailYEndPos = this.yStartPos;
         int headXEndPos = this.xStartPos;
         int headYEndPos = this.yStartPos;
 
-        boolean isAtStart = true;
         for (String line : lines) {
             System.out.println();
             System.out.println("Line: " + line);
@@ -48,87 +50,87 @@ public class Main {
 
             switch (action) {
                 case "R":
-                    if (count == 1)
+
+                    for (int i = 1; i <= count; i++) {
                         headXEndPos = headXEndPos + 1;
-                    else {
-                        for (int i = 1; i <= count; i++) {
-                            headXEndPos = headXEndPos + 1;
-                            int diff = Math.abs(headXEndPos - tailXEndPos);
-                            if (headYEndPos == tailYEndPos) {
-                                if (diff > 1) {
-                                    tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
-                                }
-                            } else {
-                                if (diff > 1) {
-                                    tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
-                                    tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
-                                }
+                        int diff = Math.abs(headXEndPos - tailXEndPos);
+                        if (headYEndPos == tailYEndPos) {
+                            if (diff > 1) {
+                                tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
-                            tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                        } else {
+                            if (diff > 1) {
+                                tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
+                                tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                            }
                         }
+                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
+                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
                 case "L":
-                    if (count == 1)
+
+                    for (int i = 1; i <= count; i++) {
                         headXEndPos = headXEndPos - 1;
-                    else {
-                        for (int i = 1; i <= count; i++) {
-                            headXEndPos = headXEndPos - 1;
-                            int diff = Math.abs(headXEndPos - tailXEndPos);
-                            if (headYEndPos == tailYEndPos) {
-                                if (diff > 1) {
-                                    tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
-                                }
-                            } else {
-                                if (diff > 1) {
-                                    tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
-                                    tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
-                                }
+                        int diff = Math.abs(headXEndPos - tailXEndPos);
+                        if (headYEndPos == tailYEndPos) {
+                            if (diff > 1) {
+                                tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
-                            tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                        } else {
+                            if (diff > 1) {
+                                tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
+                                tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                            }
                         }
+                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
+                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
                 case "U":
-                    if (count == 1)
+
+                    for (int i = 1; i <= count; i++) {
                         headYEndPos = headYEndPos + 1;
-                    else {
-                        for (int i = 1; i <= count; i++) {
-                            headYEndPos = headYEndPos + 1;
-                            int diff = Math.abs(headYEndPos - tailYEndPos);
-                            if (headXEndPos == tailXEndPos) {
-                                if (diff > 1) {
-                                    tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
-                                }
-                            } else {
-                                if (diff > 1) {
-                                    tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
-                                    tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
-                                }
+                        int diff = Math.abs(headYEndPos - tailYEndPos);
+                        if (headXEndPos == tailXEndPos) {
+                            if (diff > 1) {
+                                tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
-                            tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                        } else {
+                            if (diff > 1) {
+                                tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
+                                tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                            }
                         }
+                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
+                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
                 case "D":
-                    if (count == 1)
+
+                    for (int i = 1; i <= count; i++) {
                         headYEndPos = headYEndPos - 1;
-                    else {
-                        for (int i = 1; i <= count; i++) {
-                            headYEndPos = headYEndPos - 1;
-                            int diff = Math.abs(headYEndPos - tailYEndPos);
-                            if (headXEndPos == tailXEndPos) {
-                                if (diff > 1) {
-                                    tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
-                                }
-                            } else {
-                                if (diff > 1) {
-                                    tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
-                                    tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
-                                }
+                        int diff = Math.abs(headYEndPos - tailYEndPos);
+                        if (headXEndPos == tailXEndPos) {
+                            if (diff > 1) {
+                                tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
                             }
-                            tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                        } else {
+                            if (diff > 1) {
+                                tailYEndPos = (headYEndPos > tailYEndPos) ? tailYEndPos + 1 : tailYEndPos - 1;
+                                tailXEndPos = (headXEndPos > tailXEndPos) ? tailXEndPos + 1 : tailXEndPos - 1;
+                                tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
+                            }
                         }
+                        System.out.println("Temp Tail X: " + tailXEndPos + ", Y: " + tailYEndPos);
+                        System.out.println("Temp Head X: " + headXEndPos + ", Y: " + headYEndPos);
                     }
                     break;
             }
@@ -178,8 +180,6 @@ public class Main {
             System.out.printf("\nX Coord: %d, Y Coord: %d\n", this.xCoord, this.yCoord);
             System.out.printf("\nX Start Pos: %d, Y Start Pos: %d\n", this.xStartPos, this.yStartPos);
             System.out.printf("\nX End Pos: %d, Y End Pos: %d\n", this.xEndPos, this.yEndPos);
-
         }
-
     }
 }
