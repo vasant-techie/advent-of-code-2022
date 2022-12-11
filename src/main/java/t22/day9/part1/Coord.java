@@ -4,10 +4,11 @@ import java.util.Objects;
 
 public class Coord {
 
-    private Long x;
-    private Long y;
+    private Integer x;
+    private Integer y;
 
-    public Coord(Long x, Long y) {
+    public Coord(Integer x, Integer y) {
+        System.out.printf("\nTail X: %d, Y: %d", x, y);
         this.x = x;
         this.y = y;
     }
