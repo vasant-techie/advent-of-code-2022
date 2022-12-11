@@ -29,8 +29,7 @@ public class Main {
     }
 
     private void eval(List<String> lines) {
-        long xPos = 1l;
-        long yPos = 1l;
+
         for(String line: lines) {
             System.out.println("Line: " + line);
             String[] actionAndCount = line.split(" ");
@@ -39,7 +38,7 @@ public class Main {
             switch(action) {
                 case "R":
                     this.xEndPos = this.xEndPos + count;
-                    this.xCoord = (xPos > this.xCoord)? xPos: this.xCoord;
+                    this.xCoord = (this.xEndPos > this.xCoord)? this.xEndPos: this.xCoord;
                     break;
                 case "L":
                     long tempXPos = this.xEndPos - count;
