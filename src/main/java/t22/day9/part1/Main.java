@@ -41,6 +41,7 @@ public class Main {
         int headXEndPos = this.xStartPos;
         int headYEndPos = this.yStartPos;
 
+        tailCoords.add(new Coord(tailXEndPos, tailYEndPos));
         for (String line : lines) {
             System.out.println();
             System.out.println("Line: " + line);
