@@ -8,13 +8,13 @@ import java.util.List;
 
 public class Main {
 
-    private long xCoord = 1l;
-    private long yCoord = 1l;
+    private int xCoord = 1;
+    private int yCoord = 1;
 
-    private long xStartPos = 1l;
-    private long yStartPos = 1l;
-    private long xEndPos = 1l;
-    private long yEndPos = 1l;
+    private int xStartPos = 1;
+    private int yStartPos = 1;
+    private int xEndPos = 1;
+    private int yEndPos = 1;
 
     private List<Coord> tailCoords = new ArrayList<>();
 
@@ -25,10 +25,16 @@ public class Main {
 
     private void process(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path));
-        eval(lines);
+        find(lines);
+        calcUniqueVisited(lines);
     }
 
-    private void eval(List<String> lines) {
+    private void calcUniqueVisited(List<String> lines) {
+        int[][] grid = new int[this.xCoord][this.yCoord];
+
+    }
+
+    private void find(List<String> lines) {
 
         for(String line: lines) {
             System.out.println("Line: " + line);
@@ -41,7 +47,7 @@ public class Main {
                     this.xCoord = (this.xEndPos > this.xCoord)? this.xEndPos: this.xCoord;
                     break;
                 case "L":
-                    long tempXPos = this.xEndPos - count;
+                    int tempXPos = this.xEndPos - count;
                     if(tempXPos <= 0) {
                         this.xStartPos = this.xStartPos + Math.abs(tempXPos) + 1;
                         this.xCoord = this.xCoord + Math.abs(tempXPos) + 1;
@@ -57,7 +63,7 @@ public class Main {
                     this.yCoord = (this.yEndPos > this.yCoord)? this.yEndPos: this.yCoord;
                     break;
                 case "D":
-                    long tempYPos = this.yEndPos - count;
+                    int tempYPos = this.yEndPos - count;
                     if(tempYPos <= 0) {
                         this.yStartPos = this.yStartPos + Math.abs(tempYPos) + 1;
                         this.yCoord = this.yCoord + Math.abs(tempYPos) + 1;
