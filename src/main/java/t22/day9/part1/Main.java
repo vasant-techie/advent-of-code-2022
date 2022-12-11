@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -26,38 +25,10 @@ public class Main {
 
     private void process(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path));
-        findGridCoordAndHeadEndPosition(lines);
-        Collections.reverse(lines);
-        findHeadStartPosition(lines);
+        eval(lines);
     }
 
-    private void findHeadStartPosition(List<String> lines) {
-        long xPos = this.xEndPos;
-        long yPos = this.yEndPos;
-
-        for(String line: lines) {
-//            System.out.println("Line: " + line);
-            String[] actionAndCount = line.split(" ");
-            String action = actionAndCount[0];
-            int count = Integer.parseInt(actionAndCount[1]);
-            switch(action) {
-                case "R":
-                    xPos = xPos - count;
-                    break;
-                case "L":
-                    xPos = xPos + count;
-                    break;
-                case "D":
-                    yPos = yPos + count;
-                    break;
-                case "U":
-                    yPos = yPos - count;
-                    break;
-            }
-        }
-        System.out.printf("\nSTART POS: X: %d, Y: %d\n", xPos, yPos);
-    }
-    private void findGridCoordAndHeadEndPosition(List<String> lines) {
+    private void eval(List<String> lines) {
         long xPos = 1l;
         long yPos = 1l;
         for(String line: lines) {
@@ -67,35 +38,43 @@ public class Main {
             int count = Integer.parseInt(actionAndCount[1]);
             switch(action) {
                 case "R":
-                    xPos = xPos + count;
+                    this.xEndPos = this.xEndPos + count;
                     this.xCoord = (xPos > this.xCoord)? xPos: this.xCoord;
                     break;
                 case "L":
-                    long tempXPos = xPos - count;
-                    if(tempXPos <= 0)
-                        xPos = xPos + Math.abs(tempXPos) + 1;
-                    else
-                        xPos = tempXPos;
-                    this.xCoord = (xPos > this.xCoord)? xPos: this.xCoord;
+                    long tempXPos = this.xEndPos - count;
+                    if(tempXPos <= 0) {
+                        this.xStartPos = this.xStartPos + Math.abs(tempXPos) + 1;
+                        this.xCoord = this.xCoord + Math.abs(tempXPos) + 1;
+                        this.xEndPos = 1;
+                    }
+                    else {
+                        this.xEndPos = tempXPos;
+                        this.xCoord = (this.xEndPos > this.xCoord) ? this.xEndPos : this.xCoord;
+                    }
                     break;
                 case "U":
-                    yPos = yPos + count;
-                    this.yCoord = (yPos > this.yCoord)? yPos: this.yCoord;
+                    this.yEndPos = this.yEndPos + count;
+                    this.yCoord = (this.yEndPos > this.yCoord)? this.yEndPos: this.yCoord;
                     break;
                 case "D":
-                    long tempYPos = yPos - count;
-                    if(tempYPos <= 0)
-                        yPos = yPos + Math.abs(tempYPos) + 1;
-                    else
-                        yPos = tempYPos;
-                    this.yCoord = (yPos > this.yCoord)? yPos: this.yCoord;
+                    long tempYPos = this.yEndPos - count;
+                    if(tempYPos <= 0) {
+                        this.yStartPos = this.yStartPos + Math.abs(tempYPos) + 1;
+                        this.yCoord = this.yCoord + Math.abs(tempYPos) + 1;
+                        this.yEndPos = 1;
+                    }
+                    else {
+                        this.yEndPos = tempYPos;
+                        this.yCoord = (this.yEndPos > this.yCoord) ? this.yEndPos : this.yCoord;
+                    }
                     break;
             }
+            System.out.printf("\nX Coord: %d, Y Coord: %d\n", this.xCoord, this.yCoord);
+            System.out.printf("\nX Start Pos: %d, Y Start Pos: %d\n", this.xStartPos, this.yStartPos);
+            System.out.printf("\nX End Pos: %d, Y End Pos: %d\n", this.xEndPos, this.yEndPos);
+
         }
-        System.out.printf("\nX: %d, Y: %d\n", xPos, yPos);
-        this.xEndPos = xPos;
-        this.yEndPos = yPos;
-        System.out.println("X Coord: " + this.xCoord);
-        System.out.println("Y Coord: " + this.yCoord);
+
     }
 }
