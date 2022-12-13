@@ -3,7 +3,6 @@ package t22.day13.part1;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Main {
+
+    private int totalRightOrder;
     public static void main(String[] args) throws IOException {
         Main main = new Main();
-        main.process("src/main/resources/day13-sample");
+        main.process("src/main/resources/day13");
     }
 
     private void process(String path) throws IOException {
@@ -22,8 +23,8 @@ public class Main {
         AtomicInteger index = new AtomicInteger(0);
         Map<Integer, List<String>> pairsGroup = lines.stream().filter(l -> !l.isBlank()).collect(Collectors.groupingBy(l -> index.getAndIncrement() / 2));
         int pairCount = pairsGroup.size();
-        for (int i = 0; i < pairCount; i++) {
-            List<String> pairs = pairsGroup.get(i);
+        for (int pairIndex = 0; pairIndex < pairCount; pairIndex++) {
+            List<String> pairs = pairsGroup.get(pairIndex);
             String leftPacket = pairs.get(0);
             String rightPacket = pairs.get(1);
             //[[4,4],4,4]
@@ -31,8 +32,9 @@ public class Main {
             LinkedList rightList = new LinkedList();
             mapStringToColl(leftPacket, leftList, 0);
             mapStringToColl(rightPacket, rightList, 0);
-            boolean isRightOrder = compareLeftRight((LinkedList) leftList.get(0), (LinkedList) rightList.get(0));
+            compareLeftRight((LinkedList) leftList.get(0), (LinkedList) rightList.get(0), pairIndex);
         }
+        System.out.println("#### Final Total Count of Right Order is: " + this.totalRightOrder);
 
     }
 
@@ -60,9 +62,11 @@ public class Main {
         return 0;
     }
 
-    private boolean compareLeftRight(LinkedList leftPacket, LinkedList rightPacket) {
-
+    private boolean compareLeftRight(LinkedList leftPacket, LinkedList rightPacket, int pairIndex) {
+        if(leftPacket.size() > rightPacket.size())
+            return false;
         for (int i = 0; i < leftPacket.size(); i++) {
+
             Object left = leftPacket.get(i);
             Object right = rightPacket.get(i);
             LinkedList leftList;
@@ -74,15 +78,16 @@ public class Main {
                 if (leftVal > rightVal)
                     return false;
             } else {
-                return compareLeftRightList(left, right);
+                return compareLeftRightList(left, right, pairIndex);
             }
 
         }
-
+        System.out.println("Pair Index in Right Order: " + (pairIndex+1));
+        this.totalRightOrder += pairIndex + 1;
         return true;
     }
 
-    private boolean compareLeftRightList(Object left, Object right) {
+    private boolean compareLeftRightList(Object left, Object right, int pairIndex) {
         LinkedList rightList;
         LinkedList leftList;
         if (left instanceof Integer && right instanceof List) {
@@ -100,7 +105,7 @@ public class Main {
         if (leftList.size() > rightList.size())
             return false;
 
-        return compareLeftRight(leftList, rightList);
+        return compareLeftRight(leftList, rightList, pairIndex);
     }
 
     private LinkedList<Integer> convertIntToList(Object val) {
