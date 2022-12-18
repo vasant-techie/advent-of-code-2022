@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Main main = new Main();
-        main.process("src/main/resources/day13-test");
+        main.process("src/main/resources/day13");
     }
 
     private void process(String path) throws IOException {
@@ -34,15 +34,18 @@ public class Main {
             mapStringToColl(leftPacket, leftList, 0);
             mapStringToColl(rightPacket, rightList, 0);
 
+            System.out.println("== Pair " + (pairIndex + 1) + " ==");
             //Left side ran out of items, so inputs are in the right order
-            /*if (leftList.get(0).size() < rightList.get(0).size()) {
-                System.out.println("Pair Index in Right Order: " + (pairIndex + 1) + ". Left side ran out of items, so inputs are in the right order");
+            LinkedList leftFirst = (LinkedList) leftList.get(0);
+            LinkedList rightFirst = (LinkedList) rightList.get(0);
+            if (leftFirst.size() == 0 && rightFirst.size() > 0) {
+                System.out.println("Pair Index " + (pairIndex + 1) + ". Left side ran out of items, so inputs are in the right order");
                 pairIndexesRightOrder.add((pairIndex + 1));
                 continue;
             }
-            this.leftSize = leftList.size();
-            this.rightSize = rightList.size();
-            System.out.println("Pair: " + (pairIndex + 1) + ", Left Size: " + this.leftSize + ", Right: " + this.rightSize);*/
+            this.leftSize = leftFirst.size();
+            this.rightSize = rightFirst.size();
+            System.out.println("Pair: " + (pairIndex + 1) + ", Left Size: " + this.leftSize + ", Right: " + this.rightSize);
             int result = compareLeftRightList(leftList, rightList, pairIndex, new StringBuilder());
             if (result == 1) {
                 System.out.println("Pair Index in Right Order: " + (pairIndex + 1));
@@ -84,12 +87,12 @@ public class Main {
 
     private int compareLeftRightList(LinkedList leftList, LinkedList rightList, int pairIndex, StringBuilder strBuilder) {
         boolean isAllEqual = true;
-        int result = 1;
+        int result = 0;
         System.out.println(strBuilder.toString() + "- Pair Index: " + pairIndex + ". Compare " + leftList + " vs " + rightList);
 
         for (int i = 0; i < rightList.size(); i++) {
 
-            if(i >= leftList.size()) {
+            if (i >= leftList.size()) {
                 break;
             }
 
@@ -100,40 +103,52 @@ public class Main {
                 int leftVal = (Integer) left;
                 int rightVal = (Integer) right;
 
-                if (leftVal > rightVal)
-                    return -1;
-                else if (rightVal > leftVal)
+                System.out.println(strBuilder + "- Compare " + leftVal + " vs " + rightVal);
+
+                if (leftVal > rightVal) {
+                    System.out.println(strBuilder.append(" ") + "- Right side is smaller, so inputs are not in the right order");
                     isAllEqual = false;
+                    result = -1;
+                    break;
+                } else if (rightVal > leftVal) {
+                    isAllEqual = false;
+                    System.out.println(strBuilder.append(" ") + "- Left side is smaller, so inputs are in the right order");
+                    result = 1;
+                    break;
+                }
             } else if (left instanceof Integer && right instanceof List) {
                 leftList = convertIntToList(left);
                 result = compareLeftRightList(leftList, new LinkedList((LinkedList) right), pairIndex, strBuilder.append(" "));
-                if (result == -1)
-                    break;
-                else if(result == 1)
+                if (result == -1 || result == 1) {
                     isAllEqual = false;
+                    break;
+                }
             } else if (left instanceof List && right instanceof Integer) {
                 rightList = convertIntToList(right);
                 result = compareLeftRightList(new LinkedList((LinkedList) left), rightList, pairIndex, strBuilder.append(" "));
-                if (result == -1)
-                    break;
-                else if(result == 1)
+                if (result == -1 || result == 1) {
                     isAllEqual = false;
+                    break;
+                }
             } else if (left instanceof List && right instanceof List) {
                 result = compareLeftRightList(new LinkedList((LinkedList) left), new LinkedList((LinkedList) right), pairIndex, strBuilder.append(" "));
-                if (result == -1)
-                    break;
-                else if(result == 1)
+                if (result == -1 || result == 1) {
                     isAllEqual = false;
+                    break;
+                }
             }
         }
 
         if (isAllEqual == true) {
             if (rightList.size() < leftList.size()) {
-                System.out.println("# isEqual #");
-                result = 0;
-            } else if(rightList.size() == 0 && leftList.size() == 0) {
+                System.out.println(strBuilder.append(" ") + "- Right side ran out of items, so inputs are not in the right order");
+                result = -1;
+            } else if (rightList.size() == 0 && leftList.size() == 0) {
                 System.out.println("## isEqual 0 ##");
                 result = 0;
+            } else if (rightList.size() > leftList.size()) {
+                System.out.println(strBuilder.append(" ") + "- Left side ran out of items, so inputs are in the right order");
+                result = 1;
             }
         }
         return result;
